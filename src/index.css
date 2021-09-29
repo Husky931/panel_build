@@ -132,6 +132,9 @@ input[type="number"]::-webkit-inner-spin-button {
 .text-left {
   text-align: left;
 }
+.zIndexTop {
+  z-index: 9999;
+}
 .color-black {
   color: #000;
 }

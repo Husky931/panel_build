@@ -1,3 +1,6 @@
+"use strict";
+
+import React, { useState } from "react";
 import {
   ThemeProvider,
   Paper,
@@ -14,9 +17,63 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { useTheme } from "@pinyinma/playground-theme";
 import "@pinyinma/playground-css";
+import reactCSS from "reactcss";
+import { SketchPicker } from "react-color";
 
 function App() {
   const [theme] = useTheme();
+
+  const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const [colorChosen, setColorChosen] = useState({
+    r: "241",
+    g: "112",
+    b: "19",
+    a: "1",
+  });
+
+  const handleClick = () => {
+    console.log("here");
+    setDisplayColorPicker(!displayColorPicker);
+  };
+
+  const handleClose = () => {
+    console.log("here 2");
+    setDisplayColorPicker(false);
+  };
+
+  const handleChange = (color) => {
+    setColorChosen(color.rgb);
+  };
+
+  const styles = reactCSS({
+    default: {
+      color: {
+        width: "36px",
+        height: "14px",
+        borderRadius: "2px",
+        background: `rgba(${colorChosen.r}, ${colorChosen.g}, ${colorChosen.b}, ${colorChosen.a})`,
+      },
+      swatch: {
+        padding: "3px",
+        background: "#fff",
+        borderRadius: "1px",
+        boxShadow: "0 0 0 1px rgba(0,0,0,.1)",
+        display: "inline-block",
+        cursor: "pointer",
+      },
+      popover: {
+        position: "absolute",
+        zIndex: "2",
+      },
+      cover: {
+        position: "fixed",
+        top: "0px",
+        right: "0px",
+        bottom: "0px",
+        left: "0px",
+      },
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -159,6 +216,23 @@ function App() {
                   type="number"
                   className="input m-x-5"
                 />
+              </div>
+            </section>
+            <section className="width100 h-44-px row-between">
+              <div className="m-x-5">Color</div>
+              <div>
+                <div style={styles.swatch} onClick={() => handleClick()}>
+                  <div style={styles.color} />
+                </div>
+                {displayColorPicker ? (
+                  <div style={styles.popover}>
+                    <div style={styles.cover} onClick={() => handleClose()} />
+                    <SketchPicker
+                      color={colorChosen}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </div>
+                ) : null}
               </div>
             </section>
           </section>
